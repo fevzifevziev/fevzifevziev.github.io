@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>ГЛАВНАЯ</title>
+<style>
+body {
+  align-items: center;
+  background: #c0e090;
+  background: -webkit-linear-gradient(120deg, #c0e090, #F6D8E4);
+  background: linear-gradient(120deg, #c0e090, #F6D8E4);
+  display: flex;
+  flex-direction: column;
+  font-family: 'Nunito Sans', sans-serif;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
+}
+.button , .button2, .button3{
+  height: 60px;
+  margin: 30px 0;
+  position: relative;
+  width: 200px;
+}
+.submit {
+  align-items: center;
+  background: #273439;
+  border: 0;
+  border-radius: 15px;
+  cursor: pointer;
+  color: #fff;
+  display: flex;
+  font-family: 'Nunito Sans', sans-serif;
+  font-size: 20px;
+  font-weight: 200;
+  height: 60px;
+  justify-content: center;
+  position: absolute;
+  transition: background 300ms, opacity 500ms 800ms;
+  user-select: none;
+  width: 200px;
+}
+.submit:hover  {
+  background: #0e232e;
+}
+#time, #week
+{
+  border-radius: 1%;
+  padding: 10px;
+  background: -webkit-linear-gradient(12000deg,  #F6D8E4,#c0e090);
+}
+svg {
+  left: -200px;
+  position: absolute;
+  top: -60px;
+  transform: scale(1);
+}
+path {
+  fill:#27b3ff;
+  stroke:#0e232e;
+  transform-origin: 50%;
+  transition: transform 1200ms cubic-bezier(0.6, -0.48, 0.735, 0.045), fill 1200ms, stroke 1200ms;
+}
+.time0 {
+  bottom: 10px;
+  cursor: pointer;
+  font-weight: 400;
+  left: auto;
+  position: absolute;
+  right: 30px;
+  top: auto;
+  position: left;
+  font-size: 50px;
+  margin: 50px;
+}
+.week0 {
+  bottom: 10px;
+  cursor: pointer;
+  font-weight: 400;
+  left: auto;
+  position: absolute;
+  left: 30px;
+  top: auto;
+  font-size: 50px;
+  margin: 50px;
+  
+}
+</style>
+</head>
+<script>
+var time = setInterval(function() {
+  var date = new Date();
+  document.getElementById("time").innerHTML = (date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds() + ":"+date.getMilliseconds());
+}, 1000);
+
+var week = setInterval(function() {
+  var date = new Date();
+  var Month =  date.getMonth()+1;
+  var Day =  date.getUTCDate()+1;
+  document.getElementById("week").innerHTML = (Day+"." + Month + "."+ date.getUTCFullYear() );
+}, 1000);
+  </script>
+<body  translate="no">
+  
+<div id="a1" class="button"  >
+    <svg width="600" height="180" viewBox="0 0 600 180">
+    <g>
+    <path  id="a1" d="M 214.75 60.25 C 206.44 60.25 199.75 66.94 199.75 75.25 L 199.75 85.25 L 224.75 60.25 L 214.75 60.25 z " />
+    <path  id="a1" d="M 224.75 60.25 L 199.75 85.25 L 199.75 105.25 C 199.75 108.11697 200.56093 110.78156 201.94531 113.05469 L 254.75 60.25 L 224.75 60.25 z " />
+    <path  id="a1" d="M 254.75 60.25 L 201.94531 113.05469 C 204.5736 117.37029 209.30697 120.25 214.75 120.25 L 224.75 120.25 L 284.75 60.25 L 254.75 60.25 z " />
+    <path  id="a1" d="M 284.75 60.25 L 224.75 120.25 L 254.75 120.25 L 314.75 60.25 L 284.75 60.25 z " />
+    <path  id="a1" d="M 314.75 60.25 L 254.75 120.25 L 284.75 120.25 L 344.75 60.25 L 314.75 60.25 z " />
+    <path  id="a1" d="M 344.75 60.25 L 284.75 120.25 L 314.75 120.25 L 374.75 60.25 L 344.75 60.25 z " />
+    <path  id="a1" d="M 374.75 60.25 L 314.75 120.25 L 344.75 120.25 L 397.55469 67.445312 C 394.9264 63.129713 390.19303 60.25 384.75 60.25 L 374.75 60.25 z " />
+    <path  id="a1" d="M 397.55469 67.445312 L 344.75 120.25 L 374.75 120.25 L 399.75 95.25 L 399.75 75.25 C 399.75 72.38303 398.93907 69.718439 397.55469 67.445312 z " />
+    <path  id="a1" d="M 399.75 95.25 L 374.75 120.25 L 384.75 120.25 C 393.06 120.25 399.75 113.56 399.75 105.25 L 399.75 95.25 z " />
+    </g>
+    </svg>
+    <div id="a1" class="submit">Калькулятор</div>
+</div>
+<div id="a2" class="button" >
+    <svg width="600" height="180" viewBox="0 0 600 180">
+    <g>
+    <path id="a2" d="M 214.75 60.25 C 206.44 60.25 199.75 66.94 199.75 75.25 L 199.75 85.25 L 224.75 60.25 L 214.75 60.25 z " />
+    <path id="a2" d="M 224.75 60.25 L 199.75 85.25 L 199.75 105.25 C 199.75 108.11697 200.56093 110.78156 201.94531 113.05469 L 254.75 60.25 L 224.75 60.25 z " />
+    <path id="a2" d="M 254.75 60.25 L 201.94531 113.05469 C 204.5736 117.37029 209.30697 120.25 214.75 120.25 L 224.75 120.25 L 284.75 60.25 L 254.75 60.25 z " />
+    <path id="a2" d="M 284.75 60.25 L 224.75 120.25 L 254.75 120.25 L 314.75 60.25 L 284.75 60.25 z " />
+    <path id="a2" d="M 314.75 60.25 L 254.75 120.25 L 284.75 120.25 L 344.75 60.25 L 314.75 60.25 z " />
+    <path id="a2" d="M 344.75 60.25 L 284.75 120.25 L 314.75 120.25 L 374.75 60.25 L 344.75 60.25 z " />
+    <path id="a2" d="M 374.75 60.25 L 314.75 120.25 L 344.75 120.25 L 397.55469 67.445312 C 394.9264 63.129713 390.19303 60.25 384.75 60.25 L 374.75 60.25 z " />
+    <path id="a2" d="M 397.55469 67.445312 L 344.75 120.25 L 374.75 120.25 L 399.75 95.25 L 399.75 75.25 C 399.75 72.38303 398.93907 69.718439 397.55469 67.445312 z " />
+    <path id="a2" d="M 399.75 95.25 L 374.75 120.25 L 384.75 120.25 C 393.06 120.25 399.75 113.56 399.75 105.25 L 399.75 95.25 z " />
+    </g>
+    </svg>
+    <div id="a2" class="submit">Рандом </div>
+</div>
+<div id="a3" class="button">
+    <svg width="600" height="180" viewBox="0 0 600 180">
+    <g>
+    <path id="a3" d="M 214.75 60.25 C 206.44 60.25 199.75 66.94 199.75 75.25 L 199.75 85.25 L 224.75 60.25 L 214.75 60.25 z " />
+    <path id="a3" d="M 224.75 60.25 L 199.75 85.25 L 199.75 105.25 C 199.75 108.11697 200.56093 110.78156 201.94531 113.05469 L 254.75 60.25 L 224.75 60.25 z " />
+    <path id="a3" d="M 254.75 60.25 L 201.94531 113.05469 C 204.5736 117.37029 209.30697 120.25 214.75 120.25 L 224.75 120.25 L 284.75 60.25 L 254.75 60.25 z " />
+    <path id="a3" d="M 284.75 60.25 L 224.75 120.25 L 254.75 120.25 L 314.75 60.25 L 284.75 60.25 z " />
+    <path id="a3" d="M 314.75 60.25 L 254.75 120.25 L 284.75 120.25 L 344.75 60.25 L 314.75 60.25 z " />
+    <path id="a3" d="M 344.75 60.25 L 284.75 120.25 L 314.75 120.25 L 374.75 60.25 L 344.75 60.25 z " />
+    <path id="a3" d="M 374.75 60.25 L 314.75 120.25 L 344.75 120.25 L 397.55469 67.445312 C 394.9264 63.129713 390.19303 60.25 384.75 60.25 L 374.75 60.25 z " />
+    <path id="a3" d="M 397.55469 67.445312 L 344.75 120.25 L 374.75 120.25 L 399.75 95.25 L 399.75 75.25 C 399.75 72.38303 398.93907 69.718439 397.55469 67.445312 z " />
+    <path id="a3" d="M 399.75 95.25 L 374.75 120.25 L 384.75 120.25 C 393.06 120.25 399.75 113.56 399.75 105.25 L 399.75 95.25 z " />
+    </g>
+    </svg>
+    <div id="a3" class="submit">НАЗАД &#8656;</div>
+</div>
+<div class="time0">
+<div class="refresh" id="time">??:??:??:???</div>
+<hr>
+<div class="refresh0" >Точное Время</div>
+</div>
+<div class="week0">
+<div class="refresh2" id="week">??.??.20??</div>
+<hr>
+<div class="refresh20" >Точная Датта</div>
+</div>
+
+
+
+
+
+<script id="rendered-js">
+
+function sayHi() {
+    window.location = "calcul.html";
+}
+function sayHi3() {
+    window.location = document.referrer;
+}
+function sayHi2() {
+    window.location = "Betta09082020_Rand.html";
+}
+
+
+window.onclick=function(e){
+
+  var elem = e ? e.target : window.event.srcElement;
+  let z = elem.id;
+  if(z=="a1")
+   setTimeout(sayHi,1100);
+   else{
+    if(z=="a2")
+    setTimeout(sayHi2,1100);
+    else
+    if (z=="a3")
+    setTimeout(sayHi3,1100);}
+
+}
+
+
+
+
+function reset1(path) {
+  path.style.transitionDelay = 0;
+  path.style.transformOrigin = `50%`;
+  path.style.transform = `scale(1) rotate(0)`;
+  path.style.fill = '#273439';
+  path.style.stroke = '#273439';
+}
+
+function anim1(path) {
+  path.style.transitionDelay = `${Math.random() * 200}ms`;
+  path.style.transformOrigin = `${Math.random() * 50 + 25}% 0%`;
+  path.style.transform = `scale(0) rotate(${Math.random() * 100 - 50}deg)`;
+  path.style.fill = '#777';
+  path.style.stroke = '#555';
+}
+function anim2(path, i) {
+  path.style.transitionDuration = '1000ms';
+  path.style.transitionDelay = `${i * 55}ms`;
+  path.style.transformOrigin = `50%`;
+  path.style.transform = `scale(0) translateX(${1000 + i * 20}px)`;
+  path.style.fill = '#777';
+  path.style.stroke = '#555';
+}
+function anim3(path, i) {
+  path.style.transitionDuration = '1000ms';
+  path.style.transitionDelay = `${i * 55}ms`;
+  path.style.transformOrigin = `50%`;
+  path.style.transform = `scale(0) translateX(${-1000 + i * 20}px)`;
+  path.style.fill = '#777';
+  path.style.stroke = '#555';
+}
+
+function reset2(path) {
+  path.style.transitionDuration = 0;
+  path.style.transitionDelay = 0;
+  path.style.transformOrigin = `50%`;
+  path.style.transform = `scale(1) translateX(0)`;
+  path.style.fill = '#273439';
+  path.style.stroke = '#273439';
+}
+
+const anims = [anim1, anim2, anim3],
+resets = [reset1, reset2, reset1],
+buttons = Array.from(document.querySelectorAll('.button')),
+refresh = document.querySelector('.refresh');
+buttons.forEach((button, i) => {
+  const submit = button.querySelector('.submit');
+  let paths = button.querySelectorAll('path');
+  submit.addEventListener('click', () => {
+    paths.forEach((path, j) => {
+      anims[i](path, j);
+    });
+    submit.style.backgroundColor = 'transparent';
+    submit.style.opacity = '0';
+
+    
+  });
+});
+
+
+</script>
+</body>
+</html>
