@@ -96,7 +96,7 @@ var time = setInterval(function() {
 var week = setInterval(function() {
   var date = new Date();
   var Month =  date.getMonth()+1;
-  var Day =  date.getUTCDate()+1;
+  var Day =  date.getUTCDate();
   document.getElementById("week").innerHTML = (Day+"." + Month + "."+ date.getUTCFullYear() );
 }, 1000);
   </script>
@@ -168,7 +168,7 @@ var week = setInterval(function() {
 <script id="rendered-js">
 
 function sayHi() {
-    window.location = "calcul.html";
+    window.location = "calcul";
 }
 function sayHi3() {
     window.location = document.referrer;
