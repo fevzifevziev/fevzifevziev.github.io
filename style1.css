@@ -229,3 +229,17 @@ img {
    left: 50%;
    transform: translate(22%, 0);
  }
+::-webkit-scrollbar {
+    width: 0.7em;
+  }
+  ::-webkit-scrollbar-track {
+    background-color: rgb(237, 238, 240);
+  }
+  
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
