@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+ 
+  <head>
+     <meta charset="UTF-8">
+     <title>ДемоСцена Будильник</title>
+  </head>
+ 
+  <body>
+      <canvas width = "600" height = "600" id = "pic"></canvas>
+ 
+ 
+      <style>
+ 
+          body{
+              background: #365291 }
+ 
+          canvas{
+              display: block;
+              margin: auto auto;
+              border: 10px solid #04112F;
+              background: #CBB6CE; }
+      </style>
+ 
+ 
+      <script>
+          let c = document.getElementById('pic');
+          let ctx = c.getContext('2d');
+ 
+          let x1_;          //для координат кончика стрелочки
+          let y1_;          //
+          let fi    = -450; //угол стрелочки
+          let cnt   = 0;    //счётчик для ушек
+          let flag  = 0;    //
+          let k     = 1;    //чем больше k, тем ушки двигаются дальше
+          let speed = 3;    //скорость стрелочки
+          let delay = 10;   //задержка в миллисекундах
+ 
+          setInterval(draw, delay);  //вызывает функцию "draw" повторяя вызов через определённый интервал времени - delay .
+ 
+          function draw(){
+              //Очистка всей области Canvas
+              ctx.clearRect(0,0,600,600);
+              //Отрисовка ножек
+              legs(300, 300, 120)
+              //Отрисовка корпуса
+              circle(300, 300, 120, "red");
+              circle(300, 305, 110, "white");
+              //Отрисовка циферблата
+              bezel(300, 305, 110, 95, "black");
+              // когда fi достигнет 270 начнется анимация ушек
+              if (fi >= 270){
+                  if (flag == 0)
+                      cnt++;
+                  else if(flag == 1){
+                      cnt--;
+                      if(cnt == -5)
+                          flag = 0;
+                  }
+                  if (cnt > 5)
+                      flag = 1;
+              }
+              // пока fi не достигло 270 оно увеличивается на speed
+              else
+                  fi+=speed;
+              //Отрисовка стрелочки
+              x1_ = 60 * Math.cos(fi * 0.0174533) + 300;
+              y1_ = 60 * Math.sin(fi * 0.0174533) + 305;
+              drawArrows(300, 305, x1_, y1_, 6);
+              //Отрисовка внутреннего круга на начале стрелочки
+              circle(300, 305, 5, "#808080");
+              //Отрисовка ушек
+              ears(200+cnt*k+10, 200+cnt*k+10, 220,220, -5 / 4 * Math.PI, - Math.PI / 4);
+              ears(400+cnt*k-10, 200-cnt*k+10, 380,220,  5 / 4 * Math.PI,   Math.PI / 4);
+ 
+          }
+          //функция для отрисовки ушек
+          function ears(x_, y_, x2_, y2_, _ot, _do){
+              //Ушки
+              ctx.beginPath();
+ 
+              ctx.lineWidth = 1;
+              ctx.arc(x_, y_ ,50, _ot, _do);
+              ctx.fill();
+              ctx.stroke();
+ 
+              ctx.closePath();
+ 
+              //ножки ушек
+              ctx.beginPath();
+ 
+              ctx.strokeStyle = "#2D3839";
+              ctx.lineWidth = 8;
+              ctx.moveTo(x_, y_);
+              ctx.lineTo(x2_, y2_);
+              ctx.stroke();
+ 
+              ctx.closePath();
+          }
+ 
+          //функция для отрисовки окружности
+          function circle(x, y, r, color){
+              ctx.beginPath();
+ 
+              ctx.lineWidth = 1;
+              ctx.fillStyle = color;
+              ctx.arc(x, y, r, 0, 2*Math.PI, true);
+              ctx.fill();
+              ctx.stroke();
+ 
+              ctx.closePath();
+          }
+ 
+          //функция для отрисовки циферблата
+          function bezel(x0, y0, r1, r2, color){
+              for(let fi = 0; fi < 360; fi += 30){
+                  x1 = r1 * Math.cos(fi*0.0174533) + x0
+                  y1 = r1 * Math.sin(fi*0.0174533) + y0
+                  x2 = r2 * Math.cos(fi*0.0174533) + x0
+                  y2 = r2 * Math.sin(fi*0.0174533) + y0
+                  x3 = (r2-7) * Math.cos(fi*0.0174533) + x0
+                  y3 = (r2-7) * Math.sin(fi*0.0174533) + y0
+ 
+                  ctx.beginPath();
+ 
+                  ctx.moveTo(x1, y1);
+                  ctx.lineTo(x2, y2);
+                  ctx.stroke();
+ 
+                  ctx.font = "24px serif";
+                          ctx.strokeText((fi/30 + 2)%12 + 1, x3-7, y3+7);
+ 
+                  ctx.closePath();
+                }
+          }
+ 
+          //функция для отрисовки стрелочки
+          function drawArrows(fromx, fromy, x_center, y_center, r) {
+                var angle;
+                var x;
+                var y;
+ 
+              ctx.beginPath();
+ 
+              ctx.lineWidth = 5;
+              ctx.moveTo(x1_, y1_);
+              ctx.lineTo(fromx, fromy);
+              ctx.fillStyle = "#000";
+              ctx.stroke();
+ 
+              ctx.closePath();
+ 
+                ctx.beginPath();
+ 
+              ctx.fillStyle = "#454545";
+                angle = Math.atan2(y_center - fromy, x_center - fromx)
+                x = r * Math.cos(angle) + x_center;
+                y = r * Math.sin(angle) + y_center;
+                ctx.moveTo(x, y);
+ 
+                angle += (1 / 3) * (2 * Math.PI)
+                x = r * Math.cos(angle) + x_center;
+                y = r * Math.sin(angle) + y_center;
+                ctx.lineTo(x, y);
+ 
+                angle += (1 / 3) * (2 * Math.PI)
+                x = r * Math.cos(angle) + x_center;
+                y = r * Math.sin(angle) + y_center;
+                ctx.lineTo(x, y);
+              ctx.fill();
+ 
+                ctx.closePath();
+          }
+ 
+          //функция для отрисовки ножек
+          function legs(x0, y0, r){
+              r  -= 1;
+              ctx.beginPath();
+ 
+              ctx.strokeStyle = "#2D3839";
+              ctx.lineWidth = 10;
+ 
+              let x = r * Math.cos(1.0472) + x0;
+                let y = r * Math.sin(1.0472) + y0;
+              ctx.moveTo(x, y);
+              ctx.lineTo(x+15, y+15);
+ 
+              x = r * Math.cos(2.0944) + x0;
+                y = r * Math.sin(2.0944) + y0;
+              ctx.moveTo(x, y);
+              ctx.lineTo(x-15, y+15);
+ 
+              ctx.stroke();
+ 
+              ctx.closePath();
+          }
+ 
+     </script>
+  </body>
+</html>
