@@ -40,55 +40,60 @@
         <script>
             let c = document.getElementById('canvas');
             let ctx = c.getContext('2d');
-            let canvasWidth = canvas.width;
-            let canvasHeight = canvas.height;
-            let canvasData = ctx.getImageData(0, 0, canvasWidth, canvasHeight);
-            let prevPointer = [undefined, undefined];
-            let ctxClicked = true;
-            let coords = [];
-            let triangles = [];
-            let flagMain = true;
-                paint = false;
+
+            let prevPointer = [];
+            let ctxClicked  = true;
+
+            let coords    = []; // координаты точек
+            let triangles = []; // список координат треугольников
+
+            let flagPaint = false; //флаг для проверки протриангулировано или нет
 
 
             function set_Points()
             {
-                if (ctxClicked == false)
+                if (ctxClicked == false) //при отпускании кнопки мыши координаты точки (prevPointer) вносятся в coords
                 {
                     coords.push(prevPointer);
                 }
             }
+
+            //функция для отрисовки многоугольника и его заливки
             function drawLines(coords, color = {r: 0, g: 0, b: 0, a: 255})
-            {   if (!paint)
+            {
+                if (!flagPaint) //Очищаем canvas если многоугольник еще не протриангулирован
                 {
                     ctx.clearRect(0,0,600,600);
                 }
-                if (coords.length >= 2)
+
+                if (coords.length >= 2) //Отрисуем прымую только когда в coords будут координаты минимум 2х точек
                 {
                     ctx.beginPath();
-                    //ctx.strokeStyle = color;
+                    ctx.strokeStyle = color;
                     ctx.lineWidth = 1;
-                    ctx.fillStyle = `rgb(${randColor()}, ${randColor()}, 0)`;
+                    ctx.fillStyle = `rgb(${randColor()}, ${randColor()}, ${randColor()})`; //Рандомный цвет для заливки треугольников
                     ctx.moveTo(coords[0][0], coords[0][1]);
                     for(let i = 1; i<coords.length;i+=1)
                     {
                         ctx.lineTo(coords[i][0], coords[i][1]);
                     }
                     ctx.lineTo(coords[0][0], coords[0][1]);
-                    if(paint){
+                    if(flagPaint) //Окрашиваем только когда многоугольник протриангулирован
+                    {
                         ctx.fill();
                     }
                     ctx.stroke();
                     ctx.closePath();
                 }
             }
+            //Функция для рандомного цвета (рандом от 0 до 255)
             function randColor(min=0, max=255) {
                 min = Math.ceil(min);
                 max = Math.floor(max);
                 return Math.floor(Math.random() * (max - min + 1)) + min; //Максимум и минимум включаются
             }
 
-            // 2 Левая тройка векторов?
+            // №2 Левая тройка векторов?
             function isLeft(_i)
             {
                 const A = coords[_i%coords.length],
@@ -100,6 +105,7 @@
                 return (AB["x"] * AC["y"] - AC["x"] * AB["y"] > 0)
             }
 
+            //Функция для вычисления векторного произведения
             function cross(P1, P2, P) //ABxAP, BCxBP and CAxCP.
             {
                 let v_P1_P2 = [P2[0]-P1[0], P2[1]-P1[1], 0]
@@ -108,6 +114,7 @@
                 return (v_P1_P2[0]*v_P1_P[1] - v_P1_P2[1]*v_P1_P[0])
             }
 
+            //Узнать знаки чисел в списке
             function sign(list)
             {
                 let result = [];
@@ -119,7 +126,7 @@
                 return result
             }
 
-            //3 Есть ли другие точки внутри рассматриваемого треугольника?
+            //№3 Есть ли другие точки внутри рассматриваемого треугольника?
             function hasPointOfPolygon(_i)
             {
                 const A = coords[_i%coords.length],
@@ -150,69 +157,82 @@
             //Триангуляция
             function triangulate()
             {
-                let i = 0,
-                    crt = 0;
+                let i   = 0, // счетчик для прохода по координатам многоугольника
+                    crt = 0; // счетчик для выхода из функции чтобы не случилось бесконечное зацикливание
+
                 while (coords.length >= 3)
                 {
                     crt += 1
                     if (isLeft(i) && hasPointOfPolygon(i))
                     {
-                        triangles.push([coords[(i)%coords.length], coords[(i+1)%coords.length], coords[(i+2)%coords.length]]);
-                        if (coords.length == 3)
+                        triangles.push([coords[(i)%coords.length], coords[(i+1)%coords.length], coords[(i+2)%coords.length]]); // вносим координаты точек треугольника в triangles
+                        if (coords.length == 3) // выходим из цикла если длина coords стала равна 3
                             break;
-                        coords.splice((i+1)%coords.length, 1);
+                        coords.splice((i+1)%coords.length, 1); // №4 вершину A2 исключаем из многоугольника
                     }
-                    else
+                    else // №5 переходим к следующим трем вершинам
                     {
                         i += 1;
                         i = i%coords.length;
                     }
-                    if (crt == Math.pow(coords.length, 2))
+                    if (crt == Math.pow(coords.length, 2)) // выходим из цикла если количество итераций стало слишком большим ( false - для вывода ошибки )
                         return false;
                 }
                 coords = [];
-                paint = true;
+                flagPaint = true; // указываем в флаге, что многоугольник протриангулирован
                 return true;
             }
 
             function main_START()
             {
-                if( flagMain)
-                    {
 
-                        if (is_clockwise())
-                            {
-                              let rev = coords.reverse();
-                            }
-                        if (triangulate())
-                        {
-                            alert("Протриангулированно !");
-                            flagMain = false;
-                        }
-                        else
-                        {
-                            update_all();
-                            alert("Ошибка, Попробуйте задавать точки по часовой ");
-                        }
-                        for(let coord = 0; coord<triangles.length;coord++)
-                             drawLines(triangles[coord], color = {r: 0, g: 0, b: 0, a: 255})
-                    }
+                if (is_clockwise()) // проверка если координаты заданы против часовой - то перевернем список
+                    {let rev = coords.reverse();}
+                if (triangulate())
+                    {}
+                else // Если триангуляция зациклилась вызовим update_all и выведим ошибку
+                {
+                    update_all();
+                    alert("Ошибка!");
+                }
+                for(let coord = 0; coord < triangles.length; coord++) // отрисовка и заливка треугольников
+                     drawLines(triangles[coord], color = {r: 0, g: 0, b: 0, a: 255})
             }
 
-
-
-            function start(){
-
-                (!paint)?(((coords.length >= 3)) ? main_START() : alert("Задайте хотябы 3 точки!")) :alert("Многоугольник и так протриангулирован")
+            //функция для проверки заданы ли координаты против часовой
+            function is_clockwise()
+            {    let coord_2 = [...coords.slice(1,),coords[0]],
+              s = 0.0,
+              p2 = [],
+              p3 = [];
+              for (let i_ = 0; i_ < coords.length; i_++)
+              {
+                p1 = coords[i_];
+                p2 = coord_2[i_];
+                s += ( (p2[0] - p1[0]) * (p2[1] + p1[1]) )
+              }
+              return s > 0.0
+            }
+//-------------------------  функции  кнопок  ----------------------------------
+            function start()
+            {
+                if (!flagPaint)
+                {
+                    if (coords.length >= 3)
+                        main_START();
+                    else
+                        alert("Задайте хотябы 3 точки!");
+                }
+                else
+                    alert("Многоугольник и так протриангулирован")
             }
 
             function update_all()
             {
-                prevPointer = [undefined, undefined];
+                prevPointer = [];
                 coords = [];
                 triangles = [];
-                flagMain = true;
-                paint = false;
+                flagPaint = false;
                 ctxClicked = true;
 
                 ctx.clearRect(0, 0, 600, 600);
@@ -220,7 +240,7 @@
             }
 
             function delete_point()
-            {   if(!paint)
+            {   if(!flagPaint)
                 {
                     ctx.clearRect(0, 0, 600, 600);
                     coords.splice(-1, 1);
@@ -228,29 +248,16 @@
                 }
             }
 
-            function is_clockwise()
-            {    let coord_2 = [...coords.slice(1,),coords[0]],
-                  s = 0.0,
-                  p2 = [],
-                  p3 = [];
-                  for (let i_ = 0; i_ < coords.length; i_++)
-                  {
-                    p1 = coords[i_];
-                    p2 = coord_2[i_];
-                    s += ( (p2[0] - p1[0]) * (p2[1] + p1[1]) )
-                  }
-                  return s > 0.0
-            }
 
-            //Обротоботчик событий
+//-----------------------  Обработчик событий  -------------------------------
             c.onmousedown = (e) => {
-                if(!paint){
+                if(!flagPaint){
                     ctxClicked = true;
                     prevPointer = [e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop];
                 }
             }
             c.onmouseup   = (e) => {
-                if(!paint){
+                if(!flagPaint){
                     ctxClicked = false;
                     set_Points();
                     drawLines(coords, color = {r: 0, g: 0, b: 0, a: 255})
