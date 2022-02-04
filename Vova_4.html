@@ -178,9 +178,15 @@
             function main_START()
             {
                 if( flagMain)
-                    {   if (triangulate())
+                    {
+
+                        if (is_clockwise())
+                            {
+                              let rev = coords.reverse();
+                            }
+                        if (triangulate())
                         {
-                            alert("Протриангулированно можете начать закрашивать треугольники");
+                            alert("Протриангулированно !");
                             flagMain = false;
                         }
                         else
@@ -222,7 +228,21 @@
                 }
             }
 
-            //Обработчик событий
+            function is_clockwise()
+            {    let coord_2 = [...coords.slice(1,),coords[0]],
+                  s = 0.0,
+                  p2 = [],
+                  p3 = [];
+                  for (let i_ = 0; i_ < coords.length; i_++)
+                  {
+                    p1 = coords[i_];
+                    p2 = coord_2[i_];
+                    s += ( (p2[0] - p1[0]) * (p2[1] + p1[1]) )
+                  }
+                  return s > 0.0
+            }
+
+            //Обротоботчик событий
             c.onmousedown = (e) => {
                 if(!paint){
                     ctxClicked = true;
