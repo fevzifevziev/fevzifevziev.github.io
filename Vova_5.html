@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>3 Лаба</title>
+    </head>
+    <body>
+        <canvas width="600" height="600" id="canvas"></canvas><br>
+
+
+        <style>
+
+            body
+            {
+                background: #C5D0E6
+            }
+
+            canvas
+            {
+                display: block;
+                margin: auto auto;
+                border: 1px solid #04112F;
+                background: #CBB6CE;
+            }
+        </style>
+            
+        <script>
+        let c = document.getElementById('canvas');
+        let ctx = c.getContext('2d');
+        
+        var plot = function(x, y){ 
+            if(isFinite(x) && isFinite(y))
+            {
+                setPixel(x,y, plot.color);
+            }
+        };
+        
+        function setPixel (x, y, c) 
+        { 
+            var p = ctx.createImageData(1,1);
+            var data = ctx.getImageData(x, y, 1, 1).data;
+
+            p.data[0]=c.r;
+            p.data[1]=c.g;
+            p.data[2]=c.b;
+            p.data[3]=c.a;
+            
+            if(data[3] <= p.data[3]) //сравниваем прозрачность
+            ctx.putImageData(p,x,y);
+        }
+        
+        //---------------------------   Отрисовка линии по Алгоритму Брезенхема   ---------------------------------------
+        function drawLine(x1, y1, x2, y2, color) 
+        {
+            if(color)  
+                plot.color = color;
+             else 
+                plot.color = {r:0,g:0,b:0,a:255};
+            
+            var deltaX = Math.abs(x2 - x1);
+            var deltaY = Math.abs(y2 - y1);
+            var signX  = x1 < x2 ? 1 : -1;
+            var signY  = y1 < y2 ? 1 : -1;
+            var error  = deltaX - deltaY;
+
+            plot(x2, y2);
+            while(x1 != x2 || y1 != y2) 
+            {
+                plot(x1, y1);
+                var error2 = error * 2;
+
+                if(error2 > -deltaY) 
+                {
+                    error -= deltaY;
+                    x1 += signX;
+                }
+                if(error2 < deltaX) 
+                {
+                    error += deltaX;
+                    y1 += signY;
+                }
+            }
+        }
+
+    
+    //---------------------------   Отрисовка окружности по Алгоритму Брезенхема   ----------------------------------
+
+        function drawСircle(x0, y0, radius, color, flag=1)  //x0, y0 - центр окружности; flag - отвечает за заливку окружности; 
+        {   
+            if(color)  
+                plot.color = color;
+            else 
+                plot.color = {r:0,g:0,b:0,a:255}; 
+            while (radius > 1)
+            {
+                let x = 0, y = radius, gap = 0, delta = (2 - 2 * radius);
+                while (y >= 0)
+                {   
+                    plot(x0 + x, y0 - y, 1);
+                    plot(x0 - x, y0 - y, 1);
+                    plot(x0 - x, y0 + y, 1);
+                    plot(x0 + x, y0 + y, 1);
+
+                    gap = 2 * (delta + y) - 1;
+                    if (delta < 0 && gap <= 0)
+                    {
+                        x += 1;
+                        delta += 2 * x + 1;
+                        continue;
+                    }
+                    if (delta > 0 && gap > 0)
+                    { 
+                        y -= 1;
+                        delta -= 2 * y + 1;
+                        continue;
+                    }
+                    x += 1;
+                    delta += 2 * (x - y);
+                    y -= 1;
+                }
+
+                if (flag)        //если нам нужно залить окружность, просто уменьшаем радиус и отрисовываем до тех пор пока радиус не станет равен 1
+                    radius -= 1;
+                else
+                    return;    
+            }
+        }
+
+        //---------------------------   Отрисовка прямоугольника    ----------------------------------
+        function drawRect(x1, y1, x2, y2, color, flag=1) //x1, y1 - координаты левой верхней точки; x2,y2 - координаты правой нижней точки; flag - отвечает за заливку прямоугольника;  
+        {
+            if(color)  
+                plot.color = color;
+            else 
+                plot.color = {r:0,g:0,b:0,a:255}; 
+            if(flag)
+                {
+                    for(let y = y1; y<=y2; y++)
+                    {
+                        drawLine(x1, y, x2, y, color);  
+                    }
+                }
+            else
+            {    
+                drawLine(x1, y1, x2, y1, color);
+                drawLine(x1, y1, x1, y2, color);
+                drawLine(x2, y2, x1, y2, color);
+                drawLine(x2, y2, x2, y1, color);
+            }    
+        }
+
+        //---------------------------   Отрисовка многоугольника(треугольника)   ----------------------------------
+        function drawPolygon(coords, color, flag = 0) //coords - 2мерный список координат многоугольника(треугольника); flag - отвечает за заливку
+        {                                             //пример: [[0, 0], [100, 0], [50, 50]]
+            if(color)  
+                plot.color = color;
+            else 
+                plot.color = {r:0,g:0,b:0,a:255}; 
+            if(flag)
+            {
+
+            }   
+            else
+            {
+                for(let i = 0; i<coords.length;i++)
+                {
+                    drawLine(coords[i][0], coords[i][1], coords[(i+1)%coords.length][0], coords[(i+1)%coords.length][1], color); 
+                }
+            } 
+        }
+        //-------------------------------------Отрисовка В-Сплайна-------------------------------------------------------------
+        function drawSpline(args, color) 
+        {
+            if(color)  
+                plot.color = color;
+             else 
+                plot.color = {r:0,g:0,b:0,a:255};
+            
+
+            let coords = [[args[0], args[1]]];
+            let num = 0;
+            let deltaX;
+            let deltaY;
+
+            for(let i = 0; i<args.length; i+=2)
+            {
+                coords.push([args[i], args[i+1]]) ////////////////////TUT не append
+                if (i > 0)
+                {
+                    deltaX = coords[Math.floor(i/2+1)][0] - coords[Math.floor(i/2)][0]
+                    deltaY = coords[Math.floor(i/2+1)][1] - coords[Math.floor(i/2)][1]
+                    num += Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+                }    
+            }
+            coords.push(coords[-1])
+
+            for(let i = 1; i < coords.length-3; i++)
+            {
+                let a = []
+                let b = []
+                let arrs = _SplineCoefficient(i, coords)   //считаем коэффициенты q
+
+                for(let j = 0; j < num; j++)
+                {
+                    let points = []                          //создаём массив промежуточных точек
+                    let t = j / num                       // шаг интерполяции
+                                                    // передаём массиву точек значения по методу beta-spline
+                    points.push(arrs[0][0] + t * (arrs[0][1] + t * (arrs[0][2] + t * arrs[0][3])))
+                    points.push(arrs[1][0] + t * (arrs[1][1] + t * (arrs[1][2] + t * arrs[1][3])))
+
+                    plot(points[0], points[1]);
+                } 
+            }        
+        }           
+        //в функции рассчитываются коэффициенты a0-a3, b0-b3
+        function _SplineCoefficient(i, coords)
+        {    
+            let arrs = [[],[]]
+
+            arrs[0].push(( coords[i - 1][0] + 4*coords[i][0] + coords[i + 1][0])/6)
+            arrs[0].push((-coords[i - 1][0] + coords[i + 1][0])/2)
+            arrs[0].push(( coords[i - 1][0] - 2*coords[i][0] + coords[i + 1][0])/2)
+            arrs[0].push((-coords[i - 1][0] + 3*coords[i][0] - 3*coords[i + 1][0] + coords[i + 2][0])/6)
+            arrs[1].push(( coords[i - 1][1] + 4*coords[i][1] + coords[i + 1][1])/6)
+            arrs[1].push((-coords[i - 1][1] + coords[i + 1][1])/2)
+            arrs[1].push(( coords[i - 1][1] - 2*coords[i][1] + coords[i + 1][1])/2)
+            arrs[1].push((-coords[i - 1][1] + 3*coords[i][1] - 3*coords[i + 1][1] + coords[i + 2][1])/6)
+
+            return arrs
+        }
+
+        //____________________________Отрисовка________________________________________________________________________________
+        drawСircle(600-55, 0+50, 40, color={r:255,g:255,b:0,a:255}, flag=1);
+        //солнце
+        for (let rad = 0; rad<=60; rad++)
+            drawLine(600-55, 50, Math.floor(60*Math.cos(rad)+600-55), Math.floor(60*Math.sin(rad)+50), {r:255,g:255,b:0,a:255});
+        //горы
+        drawPolygon([[0,600],[100,300],[150,500], [250, 200], [350, 500], [400, 300], [500, 600]]);
+        //трава
+        for(let i = 0; i<600; i+=1)
+            drawSpline([0+i*10,599, 10+i*10,592, 22+i*10,581, 24+i*10,570],color={r:0,g:255,b:0,a:255})
+        </script>
+    </body>
+</html>
