@@ -1,0 +1,157 @@
+<html>
+	<head>
+		<meta charset = "UTF-8" />
+		<style>
+			canvas {
+			display: block;
+			margin: auto auto;
+			}
+			button {
+			display: block;
+			margin: auto auto;
+			}
+
+			input[type="text"]{
+		  width: 80px;
+		  margin-left: 20px;
+			}
+			.D{
+					text-align: center;
+					display: grid;
+					grid-template-columns: repeat(3, 1fr);
+					grid-template-rows: repeat(3, 100px);
+			}
+		</style>
+		<script src = "script.js" defer></script>
+	</head>
+	<body style="background-color: #12cdae">
+		<canvas height="600" width='600' id='pic'></canvas>
+		<div class="D">
+			<div class="d1">
+				<p>LX</p>
+				<input type="range" min="-2" max="2" step="0.005" id="r1" oninput="fun1()">
+				<input type="text" id="i1" readonly>
+			</div>
+			<div class="d2">
+				<p>LY</p>
+				<input type="range" min="-2" max="2" step="0.005" id="r2" oninput="fun2()">
+				<input type="text" id="i2" readonly>
+			</div>
+			<div class="d3">
+				<p>LZ</p>
+				<input type="range" min="-2" max="2" step="0.005" id="r3" oninput="fun3()">
+				<input type="text" id="i3" readonly>
+			</div>
+		</div>
+
+		<script defer>
+		var ctx;
+		var imgData;
+		var canvas;
+		var scale = 200;
+
+		canvas = document.getElementById("pic");
+		ctx = canvas.getContext("2d");
+
+		function setPixel(x, y, c)
+		{
+			/*
+				Устанавливает пиксель с координатой (x, y) с цветом c
+			*/
+			var index = 4 * (x + canvas.width * y);  // получаем индекс пикселя
+				imgData.data[index] = c.r;
+				imgData.data[index + 1] = c.g;
+				imgData.data[index + 2] = c.b;
+				imgData.data[index + 3] = c.a;
+				return c;
+		}
+
+		var i_D, lx, ly, lz; // Координаты источника света и диффузное освещение
+		lx = 0.1, ly = 0.5,	lz = 0.9;
+		function Rastr(x, y, z)
+		{
+			var xs, ys // экранные координаты
+			var  k;  // масштаб и расстояние до наблюдателя
+
+			k = -5;
+			// Перспективная проекция, масштаб и сдвиг в середину области рисования
+			xs = Math.round(k * x /(z + k) * scale) + 300;
+			ys = Math.round(k * y /(z + k) * scale) + 300;
+
+			// Расчет рассеивающего освещения по формуле Ламберта
+			i_D = (x * lx + y * ly + z * lz);
+
+			if (i_D > 0)
+				setPixel(xs, ys, {r:Math.round(255*i_D), g: i_D, b: 255*i_D, a: 255});
+			else
+				setPixel(xs, ys, {r: 0, g: 0, b: 0, a:255}); // Фоновое освещение
+
+
+		}
+
+
+		function calc_coords()
+		{
+
+			// Расчет координат x, y, z по уравнению сферы. Растеризация каждой точки
+			var x, y, z;
+			x = -1.0;
+			while (x <= 1.0)
+			{
+				y = -1.0;
+				while (y <= 1.0)
+				{
+					if (1.0 - x * x - y * y >= 0)
+					{
+						z = Math.sqrt(1.0 - x * x - y * y);
+						Rastr(x, y, z);
+					}
+					y += 0.003;
+
+				}
+				x += 0.003;
+			}
+		}
+
+
+		function draw()
+		{
+				imgData = ctx.createImageData(600, 600);
+				ctx.putImageData(imgData, 0, 0);
+				calc_coords();  // вызываем функцию отрисовки
+			ctx.putImageData(imgData, 0, 0);
+
+		}
+		function fun1() {
+			 var rng1=document.getElementById('r1');
+			 var i1=document.getElementById('i1');
+			 lx =rng1.value;
+			 i1.value = lx
+			 ctx.clearRect(0,0,600,600);
+			draw()
+		}
+
+		function fun2() {
+			 var rng2=document.getElementById('r2');
+			 var i2=document.getElementById('i2');
+			 ly =rng2.value;
+			 i2.value = ly
+			 ctx.clearRect(0,0,600,600);
+			draw()
+
+		}
+
+		function fun3() {
+			 var rng3=document.getElementById('r3');
+			 var i3=document.getElementById('i3');
+			 lz =rng3.value;
+			 i3.value = lz
+			 ctx.clearRect(0,0,600,600);
+			draw()
+
+		}
+
+		draw()
+	</script>
+	</body>
+</html>
