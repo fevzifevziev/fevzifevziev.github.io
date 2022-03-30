@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+  <head>
+     <meta charset="UTF-8">
+     <title>Часы</title>
+  </head>
+
+  <body>
+      <canvas width = "600" height = "600" id = "pic"></canvas>
+      <style>
+          body {
+                background: #365291 }
+          canvas {
+               display: block;
+               margin: auto auto;
+               border: 10px solid #04112F;
+               background: #CBB6CE; }
+      </style>
+      <script>
+          let c = document.getElementById('pic');
+          let ctx = c.getContext('2d');
+          let x1_;
+          let y1_;
+          let fi_0 = 270-6/10;
+          let fi_1 = 270;
+          let fi_2 = 270;
+
+          draw();
+          setInterval(draw, 100);
+          
+          // Обновляем холст каждую секунду
+          function draw(){
+            ctx.clearRect(0,0,600,600);
+            circle(300, 300, 120, "#808080");
+
+            circle(300, 300, 110, "white");
+            
+            //2 раза чтобы четче было видно
+            arrows(300, 300, 105, 95, "black");
+            arrows(300, 300, 105, 95, "black");
+            
+            //секундная
+            fi_0 += 6/10;
+            //минутная
+            fi_1 += 6/10/60;
+            //часовая
+            fi_2 += 6/10/60/60;
+
+            
+            
+            x1_ = 40 * Math.cos(fi_2*0.0174533) + 300;
+            y1_ = 40 * Math.sin(fi_2*0.0174533) + 300;
+            drawArrows(300, 300, x1_, y1_, 8);
+            
+            x1_ = 70 * Math.cos(fi_1*0.0174533) + 300;
+            y1_ = 70 * Math.sin(fi_1*0.0174533) + 300;
+            drawArrows(300, 300, x1_, y1_, 4);
+            
+            x1_ = 80 * Math.cos(fi_0*0.0174533) + 300;
+            y1_ = 80 * Math.sin(fi_0*0.0174533) + 300;
+            drawArrows(300, 300, x1_, y1_, 0, "red");
+
+            circle(300, 300, 5, "#808080");
+          }
+
+          
+          function circle(x, y, r, color){
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(x, y, r, 0, 2*Math.PI, true);
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = "black";
+            ctx.stroke();
+          }
+
+          function arrows(x0, y0, r1, r2,  color){
+            for(let fi = 0; fi < 360; fi += 30){
+                x1 = r1 * Math.cos(fi*0.0174533) + x0
+                y1 = r1 * Math.sin(fi*0.0174533) + y0
+                x2 = r2 * Math.cos(fi*0.0174533) + x0
+                y2 = r2 * Math.sin(fi*0.0174533) + y0
+                x3 = (r2-15) * Math.cos(fi*0.0174533) + x0
+                y3 = (r2-15) * Math.sin(fi*0.0174533) + y0
+
+                ctx.beginPath();       // Начинает новый путь
+                ctx.moveTo(x1, y1);    // Передвигает перо в точку (30, 50)
+                ctx.lineTo(x2, y2);    // Рисует линию до точки (150, 100)
+                ctx.stroke();          // Отображает путь
+
+                ctx.font = "24px serif";
+      			    ctx.strokeText((fi/30+2)%12 +1, x3-7, y3+7);
+
+                ctx.strokeStyle = color;
+                ctx.stroke();
+
+              }
+          }
+
+          function drawArrows(fromx, fromy, x_center, y_center, r, color="black") {
+          	var angle;
+          	var x;
+          	var y;
+
+            ctx.beginPath();
+            ctx.lineWidth = 5;
+            ctx.moveTo(x1_, y1_);
+            ctx.lineTo(300, 300);
+            ctx.strokeStyle = color;
+            ctx.stroke();
+            ctx.closePath();
+
+          	ctx.beginPath();
+            ctx.fillStyle = "#454545";
+            ctx.fill();
+          	angle = Math.atan2(y_center-fromy, x_center-fromx)
+          	x = r * Math.cos(angle) + x_center;
+          	y = r * Math.sin(angle) + y_center;
+
+          	ctx.moveTo(x, y);
+
+          	angle += (1 / 3) * (2 * Math.PI)
+          	x = r * Math.cos(angle) + x_center;
+          	y = r * Math.sin(angle) + y_center;
+
+          	ctx.lineTo(x, y);
+
+          	angle += (1 / 3) * (2 * Math.PI)
+          	x = r * Math.cos(angle) + x_center;
+          	y = r * Math.sin(angle) + y_center;
+
+          	ctx.lineTo(x, y);
+
+          	ctx.closePath();
+          	ctx.fill();
+          }
+
+         
+
+     </script>
+  </body>
+</html>
