@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Принадлежит ли точка треугольнику</title>
+    </head>
+    <body>
+        <canvas width="600" height="600" id="canvas"></canvas><br>
+        <div class="btn">
+            <button onclick="update_all()">    Обновить      </button>
+        </div>
+
+        <style>
+
+            body
+            {
+                background: #C5D0E6
+            }
+
+            canvas
+            {
+                display: block;
+                margin: auto auto;
+                border: 1px solid #04112F;
+                background: #CBB6CE;
+            }
+
+            .btn
+            {
+                text-align: center;
+            }
+
+        </style>
+
+        <script>
+            let c = document.getElementById('canvas');
+            let ctx = c.getContext('2d');
+
+            let prevPointer = [];
+            let ctxClicked  = true;
+
+            let coords    = []; // координаты точек
+
+            function set_Points()
+            {
+                if (ctxClicked == false) //при отпускании кнопки мыши координаты точки (prevPointer) вносятся в coords
+                    coords.push(prevPointer);
+            }
+
+            //функция для отрисовки многоугольника и его заливки
+            function drawLines(coords)
+            {   if (coords.length == 4)
+                {
+                    ctx.beginPath();
+                    ctx.strokeStyle = "red";
+                    ctx.lineWidth = 4;
+                    ctx.moveTo(coords[3][0], coords[3][1]);
+                    ctx.lineTo(coords[3][0]+1, coords[3][1]+1);
+                    ctx.stroke();
+                    ctx.closePath();
+                }
+                else if (coords.length <=3)
+                {
+                    ctx.clearRect(0,0,600,600);
+
+                    if (coords.length >= 2) //Отрисуем прымую только когда в coords будут координаты минимум 2х точек
+                    {
+                        ctx.beginPath();
+                        ctx.strokeStyle = "black";
+                        ctx.lineWidth = 1;
+                        ctx.moveTo(coords[0][0], coords[0][1]);
+                        for(let i = 1; i<coords.length;i+=1)
+                        {
+                            ctx.lineTo(coords[i][0], coords[i][1]);
+                        }
+                        ctx.lineTo(coords[0][0], coords[0][1]);
+                        ctx.stroke();
+                        ctx.closePath();
+                    }
+                }
+            }
+
+            //Функция для вычисления векторного произведения
+            function cross(P1, P2, P) //ABxAP, BCxBP and CAxCP.
+            {
+                let v_P1_P2 = [P2[0]-P1[0], P2[1]-P1[1], 0]
+                let v_P1_P  = [P[0]-P1[0], P[1]-P1[1], 0]
+
+                return (v_P1_P2[0]*v_P1_P[1] - v_P1_P2[1]*v_P1_P[0])
+            }
+
+            //Узнать знаки чисел в списке
+            function sign(list)
+            {
+                let result = [];
+                for(let i_ = 0; i_<list.length; i_++)
+                    result.push(Math.sign(list[i_]));
+
+                return result;
+            }
+
+            //№3 Есть ли другие точки внутри рассматриваемого треугольника?
+            function belong(p, list_tr)
+            {
+                const A = list_tr[0],
+                      B = list_tr[1],
+                      C = list_tr[2];
+
+                const VP0  = cross(A, B, p),
+                      VP1  = cross(B, C, p),
+                      VP2  = cross(C, A, p),
+                      s_l  = sign([VP0, VP1, VP2]);
+
+                    if (s_l[0] == s_l[1] && s_l[1] == s_l[2] && s_l[0] == s_l[2])
+                        return true;
+
+                    for(let h = 0; h < s_l.length; h++)
+                    {
+                        if (s_l[h] == 0 && s_l[(h+1)%s_l.length] == s_l[(h+2)%s_l.length])
+                            return true;
+                    }
+                return false;
+            }
+
+            
+
+           function start()
+           {
+            list_tr = [coords[0], coords[1], coords[2]]
+            console.log(belong(coords[3], list_tr));
+            if (belong(coords[3], list_tr)) 
+                alert("Точка принадлежит треугольнику");
+            else
+                alert("Точка не принадлежит треугольнику");   
+           }
+//-------------------------  функции  кнопок  ----------------------------------
+
+            function update_all()
+            {
+                prevPointer = [];
+                coords = [];
+                ctxClicked = true;
+
+                ctx.clearRect(0, 0, 600, 600);
+
+            }
+
+
+
+//-----------------------  Обротоботчик событий  -------------------------------
+            c.onmousedown = (e) => {
+                if (coords.length <= 4)
+                {
+                    ctxClicked = true;
+                    prevPointer = [e.pageX-e.target.offsetLeft, e.pageY-e.target.offsetTop];
+                }
+            }
+            c.onmouseup   = (e) => {
+                console.log( coords.length);
+                console.log( coords);
+                ctxClicked = false;
+                set_Points();
+                drawLines(coords, color = {r: 0, g: 0, b: 0, a: 255});
+                if (coords.length == 4)
+                    start();
+            }
+
+        </script>
+    </body>
+</html>
