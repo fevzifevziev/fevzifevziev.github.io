@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="./style/style.css" />
+        <title>Системы счисления. Перевод из одной системы в другую. - ГЛАВНАЯ</title>
+    </head>
+
+    <body>
+        <div class="head">
+            <h1>Системы счисления. Перевод из одной системы в другую.</h1>
+        </div>
+        <hr>
+        <div class="shortDescription">
+            <h2>Кратко об основных системах счисления</h2>
+            <p><b>Десятичная система счисления.</b> Используется в повседневной жизни и является самой распространенной. Все числа, которые нас окружают представлены в этой системе. В каждом разряде такого числа может использоваться только одна цифра от 0 до 9.</p>
+            <p><b>Двоичная система счисления.</b>Используется в вычислительной технике. Для записи числа используются цифры 0 и 1.</p>
+            <p><b>Восьмеричная система счисления.</b>Также иногда применяется в цифровой технике. Для записи числа используются цифры от 0 до 7.</p>
+            <p><b>Шестнадцатеричная система счисления.</b>Наиболее распространена в современных компьютерах. При помощи неё, например, указывают цвет. #FF0000 - красный цвет. Для записи числа используются цифры от 0 до 9 и буквы A,B,C,D,E,F, которые соответственно обозначают числа 10,11,12,13,14,15.</p>
+       
+        </div>
+        <div class="shortDescription">
+            <h2>Перевод в десятичную систему счисления</h2>
+            <p>Преобразовать число из любой системы счисления в десятичную можно следующим образом: каждый разряд числа необходимо умножить на X<sup>n</sup>, где X - основание исходного числа, n - номер разряда. Затем суммировать полученные значения.</p>
+            <p>abc<sub>x</sub> = (a*x<sup>2</sup> +  b*x<sup>1</sup> + c*x<sup>0</sup>)<sub>10</sub></p>
+            <div class="example">
+                Примеры: <br>
+                <div class="mb-1">567<sub>8</sub> = (5*8<sup>2</sup> + 6*8<sup>1</sup> + 7*8<sup>0</sup>)<sub>10</sub> = 375<sub>10</sub></div>
+                <div class="mb-1">110<sub>2</sub> = (1*2<sup>2</sup> + 1*2<sup>1</sup> + 0*2<sup>0</sup>)<sub>10</sub> = 6<sub>10</sub></div>
+                <div class="mb-1">A5<sub>16</sub> = (10*16<sup>1</sup> + 5*16<sup>0</sup>)<sub>10</sub> = 165<sub>10</sub></div>
+            </div>
+        </div>
+        <div class="shortDescription">
+            <h2>Перевод из десятичной системы счисления в другие</h2>
+            <p>Делим десятичное число на основание системы, в которую хотим перевести и записываем остатки от деления. Запишем полученные остатки в обратном порядке и получим искомое число.</p>
+            <div class="example">
+                <p>Переведем число 375<sub>10</sub> в восьмеричную систему:</p>
+                <div class="mb-1">375 / 8 = 46 (остаток 7)</div>
+                <div class="mb-1">46 / 8 = 5 (остаток 6)</div>
+                <div class="mb-1">5 / 8 = 0 (остаток 5)</div>
+                Записываем остатки и получаем 567<sub>8</sub>
+            </div>
+        </div>
+        <div class="shortDescription">
+            <h2>Ниже предоставленно более углубленное обучение по переводу чисел одной системы счисления в другие</h2>
+            <ul>
+                <li><a href="/perevod-sistem-schisleniya/iz-dvoichnoy-v-desyatichnuyu">Перевод из двоичной в десятичную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-dvoichnoy-v-vosmerichnuyu">Перевод из двоичной в восьмеричную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-dvoichnoy-v-shestnadcaterichnuyu">Перевод из двоичной в шестнадцатеричную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-desyatichnoy-v-dvoichnuyu">Перевод из десятичной в двоичную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-desyatichnoy-v-vosmerichnuyu">Перевод из десятичной в восьмеричную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-desyatichnoy-v-shestnadcaterichnuyu">Перевод из десятичной в шестнадцатеричную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-vosmerichnoy-v-dvoichnuyu">Перевод из восьмеричной в двоичную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-vosmerichnoy-v-desyatichnuyu">Перевод из восьмеричной в десятичную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-shestnadcaterichnoy-v-dvoichnuyu">Перевод из шестнадцатеричной в двоичную</a></li>
+                <li><a href="/perevod-sistem-schisleniya/iz-shestnadcaterichnoy-v-desyatichnuyu">Перевод из шестнадцатеричной в десятичную</a></li>
+            </ul>
+        </div>    
+        <div class="Footer ">
+            
+        </div>
+    </body>
+</html>        

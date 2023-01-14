@@ -1,0 +1,66 @@
+body
+{
+    background: #C5D0E6
+}
+h1
+{
+    text-align: center;
+    color: rgb(47, 1, 1);
+    font-family: Marker Felt, fantasy;
+    font-size: 3rem;
+}
+h2
+{
+    text-align: left;
+    color: rgb(47, 1, 1);
+    font-family: Arial, sans-serif;
+    font-size: 2rem;
+}
+.mb-1, .my-1 
+{
+    margin-bottom: 0.25rem!important;
+}
+.example 
+{
+    background-color: #f8f8f8;
+    border-radius: 5px;
+    padding: 1rem;
+    margin-bottom: 2rem;
+    position: relative;
+}
+.Footer
+{
+    min-height:100%;
+    margin: 0 0 70px;
+}
+.shortDescription
+{
+    background: #d4dcec  
+}
+.head
+{
+    background: #39cbde
+}
+li
+{
+    background-color: #b9cdff;
+}
+a
+{
+    text-decoration: none;
+}
+/* canvas
+{
+    display: block;
+    margin: auto auto;
+    border: 1px solid #04112F;
+    background: #CBB6CE;
+} */
+
+/* .btn
+{
+    text-align: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 100px);
+} */
