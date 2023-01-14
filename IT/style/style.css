@@ -16,6 +16,17 @@ h2
     font-family: Arial, sans-serif;
     font-size: 2rem;
 }
+.formula {
+    background: #ffee9475;
+    /* background-color: #ffee9475; */
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 2rem 1rem;
+    font-size: 1.3rem;
+    margin-top: 2rem;
+    border: 3px solid #ffee94;
+    border-radius: 10px;
+}
 .mb-1, .my-1 
 {
     margin-bottom: 0.25rem!important;
