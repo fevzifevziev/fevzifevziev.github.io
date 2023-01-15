@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../style/style.css" />
+        <title>Системы счисления. Перевод из одной системы в другую. - 2-8</title>
+    </head>
+
+    <body>
+        <div class="head">
+            <h1>Перевод из двоичной системы счисления в восьмеричную.</h1>
+        </div>
+        <hr>
+        <div class="shortDescription">
+            <h2>Как перевести</h2>
+            <p>Перевести число из двоичной системы в восьмеричную без калькулятора можно тремя способами.</p>
+            <p class="font-weight-bold">Способ 1:</p>
+            <p>Перевести сначала в десятичную систему счисления, затем из нее в конечную.</p>
+            <p class="font-weight-bold">Способ 2:</p>
+            <p>Для перевода в восьмеричную систему нужно разбить двоичное число на группы по 3 цифры справа налево. В последней (самой левой) группе вместо недостающих цифр поставить слева нули. Для каждой полученной группы произвести умножение каждого <span class="note" data-content="Разряд — это позиция или место расположения цифры в записи натурального числа.">разряда</span> на 2<sup>n</sup>, где n - номер разряда.</p>
+<div class="example">
+    <h3>Пример:</h3>
+    1101<sub>2</sub> = (001) (101) = (0*2<sup>2</sup> + 0*2<sup>1</sup> + 1*2<sup>0</sup>) (1*2<sup>2</sup> + 0*2<sup>1</sup> + 1*2<sup>0</sup>) = (0+0+1) (4+0+1) = (1) (5) = 15<sub>8</sub>
+</div>
+<p class="font-weight-bold">Способ 3:</p>
+<p>Так же как и в первом способе разбиваем число на группы. Но вместо преобразований в скобках просто заменим полученные группы (триады) на соответствующие цифры восьмеричной системы, используя таблицу триад:</p>
+<div class="table-responsive">
+    <table class="calc-table text-center">
+        <tr>
+            <th>Триада</th>
+            <td>000</td>
+            <td>001</td>
+            <td>010</td>
+            <td>011</td>
+            <td>100</td>
+            <td>101</td>
+            <td>110</td>
+            <td>111</td>
+        </tr>
+        <tr>
+            <th>Цифра</th>
+            <td>0</td>
+            <td>1</td>
+            <td>2</td>
+            <td>3</td>
+            <td>4</td>
+            <td>5</td>
+            <td>6</td>
+            <td>7</td>
+        </tr>
+    </table>
+</div>
+
+<div class="example">
+    <h3>Пример:</h3>
+    10111010<sub>2</sub> = (010) (111) (010) = 272<sub>8</sub>
+</div>
+        </div>
+        <div class="shortDescription">
+            <h2>После усвоения вами урока по переводу из двоичной системы счисления в восьмеричную можете приступать к другим урокам:</h2>
+            <ul>
+                <li><a href="./iz-dvoichnoy-v-desyatichnuyu.html">Перевод из двоичной в десятичную</a></li>
+                <li><a href="./iz-dvoichnoy-v-shestnadcaterichnuyu.html">Перевод из двоичной в шестнадцатеричную</a></li>
+                <li><a href="./iz-desyatichnoy-v-dvoichnuyu.html">Перевод из десятичной в двоичную</a></li>
+                <li><a href="./iz-desyatichnoy-v-vosmerichnuyu.html">Перевод из десятичной в восьмеричную</a></li>
+                <li><a href="./iz-desyatichnoy-v-shestnadcaterichnuyu.html">Перевод из десятичной в шестнадцатеричную</a></li>
+                <li><a href="./iz-vosmerichnoy-v-dvoichnuyu.html">Перевод из восьмеричной в двоичную</a></li>
+                <li><a href="./iz-vosmerichnoy-v-desyatichnuyu.html">Перевод из восьмеричной в десятичную</a></li>
+                <li><a href="./iz-shestnadcaterichnoy-v-dvoichnuyu.html">Перевод из шестнадцатеричной в двоичную</a></li>
+                <li><a href="./iz-shestnadcaterichnoy-v-desyatichnuyu.html">Перевод из шестнадцатеричной в десятичную</a></li>
+                <hr>
+                <li><a href="../index.html">Вернуться на ГЛАВНУЮ</a></li>
+            </ul>
+        </div>    
+        <div class="Footer ">
+            
+        </div>
+    </body>
+</html>        

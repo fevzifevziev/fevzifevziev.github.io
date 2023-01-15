@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <link rel="stylesheet" href="../style/style.css" />
+        <title>Системы счисления. Перевод из одной системы в другую. - 2-16</title>
+    </head>
+
+    <body>
+        <div class="head">
+            <h1>Перевод из двоичной системы счисления в шестнадцатеричную.</h1>
+        </div>
+        <hr>
+        <div class="shortDescription">
+            <h2>Как перевести</h2>
+            <p>Преобразовать число из двоичной системы счисления в шестнадцатеричную можно тремя способами.</p>
+            
+            <p class="font-weight-bold">Способ 1:</p>
+            <p>Перевести сначала в десятичную систему счисления, затем из нее в конечную.</p>
+            
+            <p class="font-weight-bold">Способ 2:</p>
+            <p>Разбиваем число на группы по 4 цифры справа налево. Последнюю (левую) группу дополним при необходимости ведущими нулями. Внутри каждой полученной группы произведем умножение каждой цифры на 2<sup>n</sup>, где n - номер <span class="note" data-content="Разряд — это позиция или место расположения цифры в записи натурального числа.">разряда</span>, начиная с 0. Затем сложим результаты.</p>
+            <div class="example">
+                <h3>Пример:</h3>
+                11010<sub>2</sub> = (0001) (1010) = (0*2<sup>3</sup> + 0*2<sup>2</sup> + 0*2<sup>1</sup> + 1*2<sup>0</sup>) (1*2<sup>3</sup> + 0*2<sup>2</sup> + 1*2<sup>1</sup> + 0*2<sup>0</sup>) = (0+0+0+1) (8+0+2+0) = (1) (10) = 1A<sub>16</sub>
+            </div>
+            <p class="font-weight-bold">Способ 3:</p>
+            <p>Также как и в первом способе разбиваем число на группы по 4 цифры. Заменим полученные группы (тетрады) на соответствующие цифры шестнадцатеричной системы, используя таблицу тетрад:</p>
+            <div class="table-responsive">
+                <table class="calc-table text-center">
+                    <tr>
+                        <th>Тетрада</th>
+                        <td>0000</td>
+                        <td>0001</td>
+                        <td>0010</td>
+                        <td>0011</td>
+                        <td>0100</td>
+                        <td>0101</td>
+                        <td>0110</td>
+                        <td>0111</td>
+                        <td>1000</td>
+                        <td>1001</td>
+                        <td>1010</td>
+                        <td>1011</td>
+                        <td>1100</td>
+                        <td>1101</td>
+                        <td>1110</td>
+                        <td>1111</td>
+                    </tr>
+                    <tr>
+                        <th>Цифра</th>
+                        <td>0</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                        <td>4</td>
+                        <td>5</td>
+                        <td>6</td>
+                        <td>7</td>
+                        <td>8</td>
+                        <td>9</td>
+                        <td>A</td>
+                        <td>B</td>
+                        <td>C</td>
+                        <td>D</td>
+                        <td>E</td>
+                        <td>F</td>
+                    </tr>
+                </table>
+            </div>
+            <div class="example">
+                <h3>Пример:</h3>
+                101111100<sub>2</sub> = (0001) (0111) (1100) = 17C<sub>16</sub>
+            </div>
+</div>
+        </div>
+        <div class="shortDescription">
+            <h2>После усвоения вами урока по переводу из двоичной системы счисления в шестнадцатеричную можете приступать к другим урокам:</h2>
+            <ul>
+                <li><a href="./iz-dvoichnoy-v-desyatichnuyu.html">Перевод из двоичной в десятичную</a></li>
+                <li><a href="./iz-dvoichnoy-v-vosmerichnuyu.html">Перевод из двоичной в восьмеричную</a></li>
+                <li><a href="./iz-desyatichnoy-v-dvoichnuyu.html">Перевод из десятичной в двоичную</a></li>
+                <li><a href="./iz-desyatichnoy-v-vosmerichnuyu.html">Перевод из десятичной в восьмеричную</a></li>
+                <li><a href="./iz-desyatichnoy-v-shestnadcaterichnuyu.html">Перевод из десятичной в шестнадцатеричную</a></li>
+                <li><a href="./iz-vosmerichnoy-v-dvoichnuyu.html">Перевод из восьмеричной в двоичную</a></li>
+                <li><a href="./iz-vosmerichnoy-v-desyatichnuyu.html">Перевод из восьмеричной в десятичную</a></li>
+                <li><a href="./iz-shestnadcaterichnoy-v-dvoichnuyu.html">Перевод из шестнадцатеричной в двоичную</a></li>
+                <li><a href="./iz-shestnadcaterichnoy-v-desyatichnuyu.html">Перевод из шестнадцатеричной в десятичную</a></li>
+                <hr>
+                <li><a href="../index.html">Вернуться на ГЛАВНУЮ</a></li>
+            </ul>
+        </div>    
+        <div class="Footer ">
+            
+        </div>
+    </body>
+</html>        

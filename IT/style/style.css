@@ -16,6 +16,16 @@ h2
     font-family: Arial, sans-serif;
     font-size: 2rem;
 }
+
+article .note {
+    font-weight: bold;
+    padding-bottom: 2px;
+    border-bottom: 1px dotted;
+    cursor: help;
+}
+.font-weight-bold {
+    font-weight: 700!important;
+}
 .formula {
     background: #ffee9475;
     /* background-color: #ffee9475; */
@@ -46,7 +56,11 @@ h2
 }
 .shortDescription
 {
-    background: #d4dcec  
+    background: #d4dcec;
+}
+.shortDescription ~ li
+{
+    background-color: #b9cdff; 
 }
 .head
 {
@@ -54,12 +68,86 @@ h2
 }
 li
 {
-    background-color: #b9cdff;
+    padding: 0.1%;
+    /* background-color: #b9cdff; */
 }
 a
 {
     text-decoration: none;
 }
+.alert {
+    padding: 1rem 1.25rem 1rem 50px;
+    border-radius: 10px;
+    font-weight: bold;
+    border-width: 2px;
+    border-style: solid;
+    background: transparent;
+    color: #333;
+    margin-bottom: 0.5%;
+}
+
+/* table {
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-spacing: 2px;
+    border-color: rgb(255, 81, 81);
+}
+.calc-table {
+    margin: 0px 0 20px;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+.text-center {
+    text-align: center!important;
+}
+td {
+    display: table-cell;
+    vertical-align: inherit;
+}
+.calc-table th {
+    font-size: 0.85rem;
+    font-weight: bold;
+    background-color: #ecf0f1;
+    color: #566473;
+    vertical-align: top;
+    text-align: left;
+} */
+
+/* table of contents */
+
+
+
+/* TABLE */
+
+.calc-table {
+    margin: 0px 0 20px;
+    border-collapse: collapse;
+    font-size: 1rem;
+}
+
+.calc-table td, .calc-table th {
+    border: 1px solid #ecf0f1;
+    background-color: #aac6cc;
+    padding: 8px;
+}
+
+.calc-table td.sep {
+    border: none;
+}
+
+.calc-table th {
+    font-size: 0.85rem;
+    font-weight: bold;
+    background-color: #ecf0f1;
+    color: #111112;
+    vertical-align: top;
+    text-align: left;
+}
+
+
+
 /* canvas
 {
     display: block;
