@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="shortcut icon" href="images/faviconClass.png" type="image/png">
+</head>
+	<body>
+		<canvas id="pic" width="700" height="700" style="border:1px solid red">
+		</canvas><br>
+		<button onclick="ctx.clearRect(0,0,700,700);">clear</button><br>
+		<button onclick="draw(0,0)">draw</button>
+
+		<script type="text/javascript">
+			let _ = undefined;
+			let c = document.getElementById('pic');
+			let ctx = c.getContext('2d');
+			let shape = []
+			let xRotation=0, yRotation=0;
+			let prevPointer = [];
+			let ctxClicked = false;
+      let K = 30;
+
+			class Point
+			{
+				constructor(f, x, z)
+				{
+          let dx = 0.12;
+  			  let dz = 0.12;
+					let y = f(x, z);
+					let d = 0;
+					let dydx = (f(x+dx, z)+d - f(x-dx, z)+d)/(dx*2);
+					let dydz = (f(x, z+dz)+d - f(x, z-dz)+d)/(dz*2);
+					let div = Math.sqrt(dydx*dydx + 1 + dydz*dydz);
+					this.point = [x, y, z];
+					this.normal = [-(dydx/div), -1, -(dydz/div)];
+					this.N = Math.sqrt(this.normal[0]*this.normal[0]+this.normal[1]*this.normal[1]+this.normal[2]*this.normal[2]); // длина вектора
+				}
+
+			}
+      let osi = [[0, 0, 0], [10, 0, 0], [0,-10,0], [0, 0, 10]]
+      let colOSI = ["red", "green", "blue"]
+
+			//DIRECT COMPUTATION PART
+			let F = (x, z) => { return Math.sin(x+z)/(x+z)*(-4); }
+      let temp;
+			for(let z=-5; z<5; z+=0.12)
+			{
+				temp = [];
+				for(let x=-5; x<5; x+=0.12)
+				{
+					temp.push(new Point(F, x, z));
+				}
+				shape.push(temp);
+			}
+			//EVENT ATTACHMENT
+			c.onmousedown = (e)=>{ ctxClicked = true; prevPointer = [e.pageX-8, e.pageY-8];}
+			c.onmouseup   = (e)=>
+			{
+				ctxClicked = false;
+				prevPointer = [];
+			}
+			c.onmousemove = (e)=>
+			{
+				if(ctxClicked)
+				{
+					x = e.pageX-8;
+					y = e.pageY-8;
+					if(prevPointer[0]!=x || prevPointer[1]!=y)
+					{
+						xRotation = ((x - prevPointer[0]))/(Math.PI*180);
+						yRotation = ((y - prevPointer[1]))/(Math.PI*180);
+						draw(-yRotation, -xRotation);
+						prevPointer = [x, y];
+					}
+				}
+			}
+
+
+			function rotate(x, y, z, axis=0, alpha=undefined) // axis 1=x, 2=y, 3=z. 0=no rotation
+			{
+				if(axis==0 || alpha===undefined) return [x, y, z];
+				else if(axis==1) return [x, y*Math.cos(alpha)+z*Math.sin(alpha), -y*Math.sin(alpha)+z*Math.cos(alpha)];
+				else if(axis==2) return [x*Math.cos(alpha)+z*Math.sin(alpha), y, -x*Math.sin(alpha)+z*Math.cos(alpha)];
+				else if(axis==3) return [x*Math.cos(alpha)+y*Math.sin(alpha), -x*Math.sin(alpha)+y*Math.cos(alpha), z];
+			}
+
+      function getProjectionXY(x, y, z, k=K, x_bias=350, y_bias=350) // default is k=120, coeff=0.1, bias=20
+            {
+                let scale = 50;
+                return [((k*x)/(z+k))*scale+x_bias, ((k*y)/(z+k))*scale+y_bias];
+            }
+
+			function draw(degreesX, degreesY)
+			{
+				ctx.clearRect(0, 0, 700, 700);
+
+				for(const i in shape)
+				{
+					ctx.beginPath();
+					shape[i][0].point =  rotate(...rotate(...shape[i][0].point, 1, degreesX), 2, degreesY);
+					shape[i][0].normal =  rotate(...rotate(...shape[i][0].normal, 1, degreesX), 2, degreesY);
+					ctx.moveTo(...getProjectionXY(...shape[i][0].point));
+					for(const j in shape[i])
+					{
+						if(j != 0)
+						{
+							shape[i][j].point = rotate(...rotate(...shape[i][j].point, 1, degreesX), 2, degreesY);
+							shape[i][j].normal = rotate(...rotate(...shape[i][j].normal, 1, degreesX), 2, degreesY);
+							shape[i][j].N = Math.sqrt(shape[i][j].normal[0]*shape[i][j].normal[0] + shape[i][j].normal[1]*shape[i][j].normal[1] + shape[i][j].normal[2]*shape[i][j].normal[2]);
+							ctx.fillStyle = 'red';
+							ctx.fillRect(...getProjectionXY(...shape[i][j].point),2,2);
+							if((shape[i][j].normal[2]*(-K))/(shape[i][j].N*Math.sqrt(K*K)) >= 0) // скалярное произведение (угол между направлением на камеру и нормалью к точке)
+							{
+
+								ctx.fillStyle = 'green';
+								ctx.fillRect(...getProjectionXY(...shape[i][j].point),2,2);
+							}
+						}
+					}
+					ctx.stroke();
+					ctx.closePath();
+				}
+        osi[0] =  rotate(...rotate(...osi[0], 1, degreesX), 2, degreesY);
+
+
+                  for(const j in osi)
+                  {   ctx.beginPath();
+                      ctx.moveTo(...getProjectionXY(...osi[0]));
+                      if(j != 0)
+                      {
+                          osi[j] = rotate(...rotate(...osi[j], 1, degreesX), 2, degreesY);
+                          ctx.lineTo(...getProjectionXY(...osi[j]));
+                          ctx.strokeStyle = colOSI[j-1];
+                          ctx.stroke();
+                          ctx.closePath();
+                      }
+                  }
+                  ctx.stroke();
+                  ctx.closePath();
+			}
+      draw(0,0)
+		</script>
+	</body>
+</html>
