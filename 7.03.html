@@ -1,0 +1,199 @@
+<html>
+	<head>
+		<meta charset="utf-8">
+	</head>
+	<body>
+		<canvas id='pic' width="500" height="500" ></canvas>
+
+
+		<style>
+				body{
+					background-color: #AFDAFC
+				}
+
+				#pic {
+						display: block;
+						margin: auto auto;
+						transition: all 1s ease;
+				}
+
+				#pic:hover {
+						box-shadow: 10px 10px 10px 10px rgba(15,15,15,.5);
+				}
+		</style>
+
+
+		<script>
+
+			let c = document.getElementById('pic');
+			let ctx = c.getContext('2d');
+
+			let _k = 30;
+			let prevPointer = [];
+			let ctxClicked = false;
+			let xRadians = 0; let yRadians = 0;
+
+			function drawTEXT(){
+				  ctx.beginPath();
+				  ctx.rect(0, 0, 500, 500);
+				  ctx.fillStyle = "#50C878";
+				  ctx.fill();
+				  ctx.font = "48px serif";
+				  ctx.strokeText("Потяните за экран", 70, 250);
+				}
+
+			class Point {
+  				constructor(x, y, z) {
+    					this.x = x;
+    					this.y = y;
+    					this.z = z;}
+
+  				get coords() {
+    					return [this.x, this.y, this.z];}
+
+  				add(p) {
+    					this.x += p.x;
+    					this.y += p.y;
+    					this.z += p.z;
+    					return this;}
+
+  				divide(divisor) {
+    					this.x /= divisor;
+    					this.y /= divisor;
+    					this.z /= divisor;
+    					return this;}
+
+  				distance(p) {
+  				  	return Math.sqrt(Math.pow(p.x - this.x, 2) + Math.pow(p.y - this.y, 2) + Math.pow(p.z - this.z, 2));}
+
+  				rotate(axis=0, alpha=undefined) {
+
+							if(axis==0 || alpha===undefined)
+									return this;
+
+    					else if(axis==1)
+    							[this.x, this.y, this.z] =
+														[ this.x,
+															this.y*Math.cos(alpha)+this.z*Math.sin(alpha),
+															-this.y*Math.sin(alpha)+this.z*Math.cos(alpha)    ];
+    					else if(axis==2)
+    							[this.x, this.y, this.z] =
+														[ this.x*Math.cos(alpha)+this.z*Math.sin(alpha),
+															this.y,
+															-this.x*Math.sin(alpha)+this.z*Math.cos(alpha)    ];
+    					else if(axis==3)
+    							[this.x, this.y, this.z] =
+														[ this.x*Math.cos(alpha)+this.y*Math.sin(alpha),
+															-this.x*Math.sin(alpha)+this.y*Math.cos(alpha),
+															this.z                                           ];
+    					return this;
+					}
+			}
+
+			class Poly {
+  				constructor(pointsArray) {
+    					this.points = pointsArray;
+    					this.center = this.points.reduce((acc, p) => acc.add(p), new Point(0, 0, 0)).divide(this.points.length);
+    					this.color = '#' + (Math.random().toString(16)).slice(2, 8)}
+
+  				rotate(axis=0, alpha=undefined) {
+    					for(const i in this.points)
+    					  	this.points[i].rotate(axis, alpha);
+    					this.center.rotate(axis, alpha);
+    					return this;}
+			}
+
+			let cameraPosition = new Point(0, 0, -_k);
+
+			let cube = {
+				a: [0,  0, 0],
+				b: [2,  0, 0],
+				c: [0, -2, 0],
+				d: [2, -2, 0],
+				e: [0,  0, 2],
+				f: [2,  0, 2],
+				g: [0, -2, 2],
+				h: [2, -2, 2],
+			};
+
+			let pyramid = {
+				a: [4, -2, 1],
+				b: [4,  0, 2],
+				c: [3,  0, 0],
+				d: [5,  0, 0],
+			};
+
+
+			let cube_comb    = ['acdb', 'efhg', 'cdhg', 'abfe', 'acge', 'bdhf'];
+
+			let pyramid_comb = ['abc', 'abd', 'adc', 'bcd'];
+
+			let faces = [...cube_comb.map( i =>
+                                        new Poly(  [...i].map(   _ =>
+                                                                    new Point(...cube[_])   )  ) ),
+						       ...pyramid_comb.map( i =>
+                                           new Poly(  [...i].map(   _ =>
+                                                                       new Point(...pyramid[_])   )  ) )]
+
+			function projection(x, y, z, k=_k, x_bias=250, y_bias=250){
+					let scale = 5;
+					return [((k*x << scale)/(z+k))+x_bias, ((k*y << scale)/(z+k))+y_bias];
+			}
+
+			function distanceComparator(t1, t2){
+					let result
+					if (cameraPosition.distance(t1.center) > cameraPosition.distance(t2.center))
+							result = -1
+					else
+							if (cameraPosition.distance(t1.center) < cameraPosition.distance(t2.center))
+									result = 1
+							else
+									result = 0
+					return result
+			}
+
+			function draw(xRotation, yRotation){
+					ctx.clearRect(0, 0, 500, 500)
+					ctx.beginPath();
+ 				  ctx.rect(0, 0, 500, 500);
+ 				  ctx.fillStyle = "#DCD0FF";
+ 				  ctx.fill();
+
+
+					faces.sort(distanceComparator);
+					for(const i in faces) {
+							faces[i].rotate(1, xRotation).rotate(2, yRotation);
+							ctx.fillStyle = faces[i].color;
+							ctx.beginPath();
+							ctx.moveTo(...projection(...faces[i].points[0].coords));
+							for(const p of faces[i].points)
+									ctx.lineTo(...projection(...p.coords));
+							ctx.fill();
+							ctx.closePath();
+					}
+			}
+
+			c.onmousedown = (e) => {
+					ctxClicked = true;
+					prevPointer = [e.clientX, e.clientY];}
+
+			c.onmouseup = (e) => {
+					ctxClicked = false;
+					prevPointer = [];}
+
+			c.onmousemove = (e) => {
+					if(ctxClicked)
+					{
+							x = e.clientX;
+							y = e.clientY;
+							if(prevPointer[0] != x || prevPointer[1] != y)
+							{
+									xRadians = ((x - prevPointer[0]))/(Math.PI*180);
+									yRadians = ((y - prevPointer[1]))/(Math.PI*180);
+									draw(yRadians, xRadians );
+									prevPointer = [x, y];
+									}}}
+				drawTEXT();
+		</script>
+	</body>
+</html>
